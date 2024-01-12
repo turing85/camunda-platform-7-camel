@@ -82,7 +82,7 @@ public class TaskProcessor implements Processor {
             setInHeaders(exchange);
 
             final TaskProcessor taskProcessor = this;
-            exchange.adapt(ExtendedExchange.class).addOnCompletion(new Synchronization() {
+            exchange.getExchangeExtension().addOnCompletion(new Synchronization() {
 
                 @Override
                 public void onFailure(final Exchange exchange) {
@@ -159,16 +159,13 @@ public class TaskProcessor implements Processor {
             final int retries = retriesLeft(task.getRetries(), annotation);
             final long calculatedTimeout = calculateTimeout(task.getRetries(), annotation);
 
-            CamundaUtils.retryIfOptimisticLockingException(new Callable<Void>() {
-                @Override
-                public Void call() {
-                    externalTaskService.handleFailure(task.getId(),
-                            task.getWorkerId(),
-                            exception != null ? exception.getMessage() : "task failed",
-                            retries,
-                            calculatedTimeout);
-                    return null;
-                }
+            CamundaUtils.retryIfOptimisticLockingException((Callable<Void>) () -> {
+                externalTaskService.handleFailure(task.getId(),
+                        task.getWorkerId(),
+                        exception != null ? exception.getMessage() : "task failed",
+                        retries,
+                        calculatedTimeout);
+                return null;
             });
 
         } else
@@ -193,12 +190,9 @@ public class TaskProcessor implements Processor {
                 return;
             }
 
-            CamundaUtils.retryIfOptimisticLockingException(new Callable<Void>() {
-                @Override
-                public Void call() {
-                    externalTaskService.handleBpmnError(task.getId(), task.getWorkerId(), errorCode);
-                    return null;
-                }
+            CamundaUtils.retryIfOptimisticLockingException((Callable<Void>) () -> {
+                externalTaskService.handleBpmnError(task.getId(), task.getWorkerId(), errorCode);
+                return null;
             });
 
         } else
@@ -217,16 +211,13 @@ public class TaskProcessor implements Processor {
                 variablesToBeSet = null;
             }
 
-            CamundaUtils.retryIfOptimisticLockingException(new Callable<Void>() {
-                @Override
-                public Void call() {
-                    if (variablesToBeSet != null) {
-                        externalTaskService.complete(task.getId(), task.getWorkerId(), variablesToBeSet);
-                    } else {
-                        externalTaskService.complete(task.getId(), task.getWorkerId());
-                    }
-                    return null;
+            CamundaUtils.retryIfOptimisticLockingException((Callable<Void>) () -> {
+                if (variablesToBeSet != null) {
+                    externalTaskService.complete(task.getId(), task.getWorkerId(), variablesToBeSet);
+                } else {
+                    externalTaskService.complete(task.getId(), task.getWorkerId());
                 }
+                return null;
             });
 
         }

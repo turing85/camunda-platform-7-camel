@@ -21,6 +21,8 @@ import static org.camunda.bpm.camel.component.CamundaBpmConstants.EXCHANGE_HEADE
 import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.Callable;
@@ -225,8 +227,8 @@ public class BatchConsumer extends ScheduledBatchPollingConsumer {
                 11, new Comparator<Exchange>() {
                     @Override
                     public int compare(Exchange o1, Exchange o2) {
-                        Long prio1 = (Long) o1.getProperty(EXCHANGE_HEADER_PROCESS_PRIO, 0);
-                        Long prio2 = (Long) o2.getProperty(EXCHANGE_HEADER_PROCESS_PRIO, 0);
+                        Long prio1 = (Long) Optional.ofNullable(o1.getProperty(EXCHANGE_HEADER_PROCESS_PRIO)).orElse(0L);
+                        Long prio2 = (Long) Optional.ofNullable(o2.getProperty(EXCHANGE_HEADER_PROCESS_PRIO)).orElse(0L);
                         return prio1.compareTo(prio2);
                     }
                 });
@@ -257,14 +259,16 @@ public class BatchConsumer extends ScheduledBatchPollingConsumer {
             for (final LockedExternalTask task : tasks) {
 
                 final ExchangePattern pattern = completeTask ? ExchangePattern.InOut : ExchangePattern.InOnly;
-                ExtendedExchange exchange = getEndpoint().createExchange(pattern).adapt(ExtendedExchange.class);
-
-                exchange.setFromEndpoint(getEndpoint());
+                final Exchange exchange = getEndpoint().createExchange(pattern);
                 exchange.setExchangeId(task.getWorkerId() + "/" + task.getId());
-                exchange.setProperty(EXCHANGE_HEADER_PROCESS_INSTANCE_ID, task.getProcessInstanceId());
-                exchange.setProperty(EXCHANGE_HEADER_PROCESS_DEFINITION_KEY, task.getProcessDefinitionKey());
-                exchange.setProperty(EXCHANGE_HEADER_PROCESS_DEFINITION_ID, task.getProcessDefinitionId());
-                exchange.setProperty(EXCHANGE_HEADER_PROCESS_PRIO, task.getPriority());
+                final ExchangeExtension extension = exchange.getExchangeExtension();
+
+                extension.setFromEndpoint(getEndpoint());
+                extension.setProperties(Map.of(
+                    EXCHANGE_HEADER_PROCESS_INSTANCE_ID, task.getProcessInstanceId(),
+                    EXCHANGE_HEADER_PROCESS_DEFINITION_KEY, task.getProcessDefinitionKey(),
+                    EXCHANGE_HEADER_PROCESS_DEFINITION_ID, task.getProcessDefinitionId(),
+                    EXCHANGE_HEADER_PROCESS_PRIO, task.getPriority()));
 
                 final Message in = exchange.getIn();
                 in.setHeader(EXCHANGE_HEADER_TASK, task);
