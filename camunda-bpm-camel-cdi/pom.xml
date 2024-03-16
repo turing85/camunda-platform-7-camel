@@ -50,16 +50,16 @@
             <artifactId>slf4j-api</artifactId>
             <version>${sl4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${sl4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${sl4j.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.slf4j</groupId>-->
+<!--            <artifactId>jcl-over-slf4j</artifactId>-->
+<!--            <version>${sl4j.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.slf4j</groupId>-->
+<!--            <artifactId>slf4j-log4j12</artifactId>-->
+<!--            <version>${sl4j.version}</version>-->
+<!--        </dependency>-->
         <!-- Apache Camel -->
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -161,7 +161,7 @@
             -->
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.2.5</version>
                 <configuration>
                     <!-- See https://community.jboss.org/thread/198980 -->
                     <argLine>-Djava.util.logging.config.file=${basedir}/src/test/resources/logging.properties</argLine>
@@ -186,11 +186,10 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.2.5</version>
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                        <maven.home>${maven.home}</maven.home>
                     </systemPropertyVariables>
                     <failIfNoTests>true</failIfNoTests>
                     <trimStackTrace>false</trimStackTrace>

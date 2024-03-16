@@ -17,7 +17,7 @@
     <scriptTask id="logProcessVariableServiceTask" name="Log process&#10;variable" scriptFormat="groovy">
       <incoming>SequenceFlow_2</incoming>
       <outgoing>SequenceFlow_1</outgoing>
-      <script>log.debug(var1)</script>
+      <script>log.info(var1)</script>
     </scriptTask>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_camelProcess">

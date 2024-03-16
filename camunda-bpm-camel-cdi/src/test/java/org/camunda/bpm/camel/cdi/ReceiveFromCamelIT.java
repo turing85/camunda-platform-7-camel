@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @QuarkusTestResource(H2DatabaseTestResource.class)
 public class ReceiveFromCamelIT {
 
-    private static String PROCESS_DEFINITION_KEY = "receiveFromCamelProcess";
+    private final static String PROCESS_DEFINITION_KEY = "receiveFromCamelProcess";
     @Inject
     public RepositoryService repositoryService;
     @Inject
@@ -77,11 +77,11 @@ public class ReceiveFromCamelIT {
         processVariables.put("var2", "bar");
         processVariables.put("log", log);
 //        processVariables.put("log", Variables.objectValue(log, true).serializationDataFormat(Variables.SerializationDataFormats.JAVA).create());
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("receiveFromCamelProcess", processVariables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY, processVariables);
 
         // Verify that a process instance has executed and there is one instance executing now
-        assertEquals(1, historyService.createHistoricProcessInstanceQuery().processDefinitionKey("receiveFromCamelProcess").count());
-        assertEquals(1, runtimeService.createProcessInstanceQuery().processDefinitionKey("receiveFromCamelProcess").count());
+        assertEquals(1, historyService.createHistoricProcessInstanceQuery().processDefinitionKey(PROCESS_DEFINITION_KEY).count());
+        assertEquals(1, runtimeService.createProcessInstanceQuery().processDefinitionKey(PROCESS_DEFINITION_KEY).count());
 
         /*
          * We need the process instance ID to be able to send the message to it
@@ -97,6 +97,6 @@ public class ReceiveFromCamelIT {
         assertEquals(processInstance.getId(), resultEndpoint.assertExchangeReceived(0).getProperty(EXCHANGE_HEADER_PROCESS_INSTANCE_ID));
 
         // Assert that the process instance is finished
-        assertEquals(0, runtimeService.createProcessInstanceQuery().processDefinitionKey("receiveFromCamelProcess").count());
+        assertEquals(0, runtimeService.createProcessInstanceQuery().processDefinitionKey(PROCESS_DEFINITION_KEY).count());
     }
 }

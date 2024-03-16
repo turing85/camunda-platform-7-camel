@@ -5,7 +5,7 @@
       <outgoing>flow1</outgoing>
     </startEvent>
     <sequenceFlow id="flow1" sourceRef="start" targetRef="sendToCamelServiceTask" />
-    <serviceTask id="sendToCamelServiceTask" name="Send to Camel" camunda:expression="${camel.sendTo(&#39;direct:sendToCamelServiceTask&#39;, &#39;var1&#39;)}" camunda:resultVariableName="message">
+    <serviceTask id="sendToCamelServiceTask" name="Send to Camel" camunda:expression="${camel.sendTo(&#39;direct:sendToCamelServiceTask&#39;, &#39;var1&#39;)}" camunda:resultVariable="message">
       <incoming>flow1</incoming>
       <outgoing>flow2</outgoing>
     </serviceTask>

@@ -25,7 +25,7 @@ public class LogServiceImpl implements LogService {
 
   @Override
   public void info(Object msg) {
-    log.debug("LogService: {}", msg);
+    log.info("LogService: {}", msg);
   }
 
 }
