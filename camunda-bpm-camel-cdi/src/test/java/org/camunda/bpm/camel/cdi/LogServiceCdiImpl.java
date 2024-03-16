@@ -1,10 +1,12 @@
 package org.camunda.bpm.camel.cdi;
 
-import javax.inject.Named;
-
+import java.io.Serializable;
 import org.camunda.bpm.camel.spring.util.LogServiceImpl;
+import io.smallrye.common.annotation.Identifier;
+import jakarta.inject.Singleton;
 
-@Named("log")
-public class LogServiceCdiImpl extends LogServiceImpl {
+@Singleton
+@Identifier("cdiLog")
+public class LogServiceCdiImpl extends LogServiceImpl implements Serializable {
 
 }

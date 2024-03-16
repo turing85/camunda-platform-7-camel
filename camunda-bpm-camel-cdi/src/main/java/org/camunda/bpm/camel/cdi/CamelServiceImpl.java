@@ -4,12 +4,10 @@ import org.apache.camel.CamelContext;
 import org.camunda.bpm.camel.common.CamelServiceCommonImpl;
 import org.camunda.bpm.engine.ProcessEngine;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 @Named("camel")
-//@Stateless
 public class CamelServiceImpl extends CamelServiceCommonImpl {
 
   @Inject

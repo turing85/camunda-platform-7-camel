@@ -1,17 +1,14 @@
 package org.camunda.bpm.camel.cdi;
 
+import io.quarkus.runtime.Startup;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.cdi.CdiCamelContext;
 import org.camunda.bpm.camel.component.CamundaBpmComponent;
-import org.camunda.bpm.camel.component.CamundaBpmEndpointDefaultImpl;
 import org.camunda.bpm.engine.ProcessEngine;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +32,7 @@ public class CamelContextBootstrap {
     private static final Logger LOG = LoggerFactory.getLogger(CamelContextBootstrap.class);
 
     @Inject
-    CdiCamelContext camelCtx;
+    CamelContext camelCtx;
 
     @Inject
     ProcessEngine processEngine;
