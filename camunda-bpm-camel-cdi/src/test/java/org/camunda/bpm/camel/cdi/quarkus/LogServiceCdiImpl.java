@@ -1,4 +1,4 @@
-package org.camunda.bpm.camel.cdi;
+package org.camunda.bpm.camel.cdi.quarkus;
 
 import java.io.Serializable;
 import org.camunda.bpm.camel.spring.util.LogServiceImpl;

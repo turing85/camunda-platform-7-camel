@@ -184,19 +184,19 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                    </systemPropertyVariables>
-                    <failIfNoTests>true</failIfNoTests>
-                    <trimStackTrace>false</trimStackTrace>
-                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                    <argLine>-Djava.awt.headless=true -Xmx512m</argLine>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-surefire-plugin</artifactId>-->
+<!--                <version>3.2.5</version>-->
+<!--                <configuration>-->
+<!--                    <systemPropertyVariables>-->
+<!--                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>-->
+<!--                    </systemPropertyVariables>-->
+<!--                    <failIfNoTests>true</failIfNoTests>-->
+<!--                    <trimStackTrace>false</trimStackTrace>-->
+<!--                    <redirectTestOutputToFile>true</redirectTestOutputToFile>-->
+<!--                    <argLine>-Djava.awt.headless=true -Xmx512m</argLine>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>

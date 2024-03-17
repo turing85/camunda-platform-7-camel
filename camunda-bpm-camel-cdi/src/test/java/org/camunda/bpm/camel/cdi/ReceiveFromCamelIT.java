@@ -7,9 +7,7 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.camel.cdi.quarkus.LogServiceCdiImpl;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.quarkus.engine.extension.event.CamundaEngineStartupEvent;
 import org.junit.jupiter.api.Test;
@@ -27,17 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 @QuarkusTestResource(H2DatabaseTestResource.class)
-public class ReceiveFromCamelIT {
+public class ReceiveFromCamelIT extends BaseQuarkusIntegrationTest {
 
     private final static String PROCESS_DEFINITION_KEY = "receiveFromCamelProcess";
-    @Inject
-    public RepositoryService repositoryService;
-    @Inject
-    public RuntimeService runtimeService;
-    @Inject
-    public HistoryService historyService;
-    @Inject
-    CamelContextBootstrap camelContextBootstrap;
+
     @Inject
     @EndpointInject("mock:resultEndpoint")
     MockEndpoint resultEndpoint;
@@ -47,11 +38,7 @@ public class ReceiveFromCamelIT {
 
     // Method is called as soon as the Process Engine is running
     public void deployProcess(@Observes CamundaEngineStartupEvent startupEvent) {
-        // Create a new deployment
-        repositoryService.createDeployment()
-                .addClasspathResource("process/ReceiveFromCamel.bpmn20.xml")// Filename of the process model
-                .enableDuplicateFiltering(true)// No redeployment when process model remains unchanged
-                .deploy();
+        deployProcess("process/ReceiveFromCamel.bpmn20.xml");
     }
 
     @Produces
