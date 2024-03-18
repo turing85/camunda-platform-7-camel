@@ -38,7 +38,7 @@ public class ReceiveFromCamelIT extends BaseQuarkusIntegrationTest {
 
     // Method is called as soon as the Process Engine is running
     public void deployProcess(@Observes CamundaEngineStartupEvent startupEvent) {
-        deployProcess("process/ReceiveFromCamel.bpmn20.xml");
+        deployProcess("process/ReceiveFromCamelQuarkus.bpmn20.xml");
     }
 
     @Produces

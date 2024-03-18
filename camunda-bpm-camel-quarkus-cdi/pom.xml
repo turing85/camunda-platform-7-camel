@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <name>camunda BPM - Apache Camel Integration (CDI)</name>
-    <artifactId>camunda-bpm-camel-cdi</artifactId>
+    <artifactId>camunda-bpm-camel-quarkus-cdi</artifactId>
 
     <parent>
         <groupId>org.camunda.bpm.extension.camel</groupId>
@@ -13,14 +13,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <skipITs>true</skipITs>
-        <quarkus.version>3.2.10.Final</quarkus.version>
+        <skipITs>false</skipITs>
+        <quarkus.version>3.8.2</quarkus.version>
     </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>io.quarkus.platform</groupId>
                 <artifactId>quarkus-bom</artifactId>
+                <version>${quarkus.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>io.quarkus.platform</groupId>
+                <artifactId>quarkus-camel-bom</artifactId>
                 <version>${quarkus.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
@@ -39,45 +46,21 @@
             <version>${camunda-bpm.version}</version>
             <scope>provided</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.camunda.bpm</groupId>-->
-<!--            <artifactId>camunda-engine-cdi</artifactId>-->
-<!--            <version>${camunda-bpm.version}</version>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${sl4j.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.slf4j</groupId>-->
-<!--            <artifactId>jcl-over-slf4j</artifactId>-->
-<!--            <version>${sl4j.version}</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.slf4j</groupId>-->
-<!--            <artifactId>slf4j-log4j12</artifactId>-->
-<!--            <version>${sl4j.version}</version>-->
-<!--        </dependency>-->
         <!-- Apache Camel -->
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>${camel.version}</version>
+            <groupId>org.apache.camel.quarkus</groupId>
+            <artifactId>camel-quarkus-core</artifactId>
         </dependency>
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.camunda.bpm.quarkus</groupId>
             <artifactId>camunda-bpm-quarkus-engine</artifactId>
             <version>${camunda-bpm.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel.quarkus</groupId>
-            <artifactId>camel-quarkus</artifactId>
-            <version>3.2.3</version>
-            <type>pom</type>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -114,38 +97,14 @@
             <artifactId>camunda-bpm-camel-common-tests</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-jsr223</artifactId>
-            <version>3.0.20</version>
+            <version>3.0.21</version>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.apache.camel</groupId>-->
-<!--            <artifactId>camel-mvel</artifactId>-->
-<!--            <version>${camel.version}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.uuid</groupId>-->
-<!--            <artifactId>java-uuid-generator</artifactId>-->
-<!--            <version>4.0.1</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.easytesting</groupId>-->
-<!--            <artifactId>fest-assert-core</artifactId>-->
-<!--            <version>2.0M10</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>jakarta.inject</groupId>
             <artifactId>jakarta.inject-api</artifactId>
-            <version>2.0.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -155,18 +114,13 @@
             <!-- Plugin for integration tests. Defaults to in include all "**/*IT.java" -->
             <!-- See http://maven.apache.org/plugins/maven-failsafe-plugin/examples/inclusion-exclusion.html -->
 
-            <!-- Integration tests are disabled by default.
-                 They require a running JBoss AS 7.1.2 instance listening to default ports.
-                 Set -DskipITs=false on the Maven command line to enable the tests.
+            <!-- Integration tests are enabled by default.
+                 They start a quarkus instance.
+                 Set -DskipITs=true on the Maven command line to disable the tests.
             -->
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.2.5</version>
-                <configuration>
-                    <!-- See https://community.jboss.org/thread/198980 -->
-                    <argLine>-Djava.util.logging.config.file=${basedir}/src/test/resources/logging.properties</argLine>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
                 <executions>
                     <execution>
                         <id>failsafe-integration-tests</id>
@@ -184,19 +138,6 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <artifactId>maven-surefire-plugin</artifactId>-->
-<!--                <version>3.2.5</version>-->
-<!--                <configuration>-->
-<!--                    <systemPropertyVariables>-->
-<!--                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>-->
-<!--                    </systemPropertyVariables>-->
-<!--                    <failIfNoTests>true</failIfNoTests>-->
-<!--                    <trimStackTrace>false</trimStackTrace>-->
-<!--                    <redirectTestOutputToFile>true</redirectTestOutputToFile>-->
-<!--                    <argLine>-Djava.awt.headless=true -Xmx512m</argLine>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
         </plugins>
     </build>
 </project>

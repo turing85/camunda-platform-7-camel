@@ -30,7 +30,7 @@ public class SendToCamelIT extends BaseQuarkusIntegrationTest {
 
     // Method is called as soon as the Process Engine is running
     public void deployProcess(@Observes CamundaEngineStartupEvent startupEvent) {
-        deployProcess("process/SendToCamelDelegate.bpmn20.bpmn");
+        deployProcess("process/SendToCamelQuarkusDelegate.bpmn20.bpmn");
     }
 
     @Produces

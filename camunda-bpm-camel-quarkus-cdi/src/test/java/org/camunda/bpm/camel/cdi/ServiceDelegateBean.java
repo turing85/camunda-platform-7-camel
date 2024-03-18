@@ -20,6 +20,13 @@ public class ServiceDelegateBean implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) {
+//        String expression = (String) execution.getVariable("expression");
+//        vars = new Map();
+//        vars.put(camel);
+//        vars.put(execution);
+//        ONGL.execute(expression, vars);
+//        execution.get
+
         try (ProducerTemplate tpl = camelCtx.createProducerTemplate()) {
             tpl.sendBodyAndProperty((String) execution.getVariable("endpoint"),
                     execution.getVariable("content"),

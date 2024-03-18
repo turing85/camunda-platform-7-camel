@@ -34,7 +34,7 @@ public class StartProcessFromRouteIT extends BaseQuarkusIntegrationTest {
 
     // Method is called as soon as the Process Engine is running
     public void deployProcess(@Observes CamundaEngineStartupEvent startupEvent) {
-        deployProcess("process/StartProcessFromRoute.bpmn20.xml");
+        deployProcess("process/StartProcessFromRouteQuarkus.bpmn20.xml");
     }
 
     @Produces
