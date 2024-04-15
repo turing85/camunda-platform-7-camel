@@ -33,7 +33,6 @@ import org.camunda.bpm.engine.externaltask.LockedExternalTask;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricVariableInstance;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -961,7 +960,7 @@ public class ConsumeExternalTasksTest extends BaseQuarkusIntegrationTest {
         }
     }
 
-    private void assertProcessDidNotEnd(@NotNull ProcessInstance processInstance, String endActivityId) {
+    private void assertProcessDidNotEnd(ProcessInstance processInstance, String endActivityId) {
         assertNull(historyService
                 .createHistoricActivityInstanceQuery()
                 .processInstanceId(processInstance.getId())
